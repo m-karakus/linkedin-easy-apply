@@ -1,0 +1,35 @@
+username: metin_karakus@xxx.com
+password: "***"
+
+positions:
+- Data Scientist
+- Data Analyst
+# - A third position you want to search for
+
+locations:
+- European Economic Area
+#- Australia and New Zealand
+#- Ireland
+#- United States
+# - Poland
+# - norway
+# - Denmark
+# - Remote
+# - new zealand
+# - A second location you want to search in 
+
+# --------- Optional Parameters -------
+# uploads:
+#  Resume: # PATH TO Resume 
+#  Cover Letter: # PATH TO cover letter
+#  Photo: # PATH TO photo
+
+
+# output_filename:
+# - # PATH TO OUTPUT FILE (default output.csv)
+
+# blacklist:
+# - # Company names you want to ignore
+
+#blackListTitles:
+#- # Add job titles you want to ignore
