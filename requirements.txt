@@ -1,7 +1,7 @@
-selenium
-beautifulsoup4
-pandas
-pyautogui
-webdriver_manager
-PyYAML
-lxml
+selenium==4.1.5
+beautifulsoup4==4.11.1
+pandas==1.4.2
+pyautogui==0.9.53
+webdriver_manager==3.7.0
+PyYAML==6.0.0
+lxml==4.8.0
