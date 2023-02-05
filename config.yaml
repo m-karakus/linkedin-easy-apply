@@ -1,0 +1,30 @@
+username: 
+password: 
+
+positions:
+  - Data Analyst
+  - Data Scientist
+# - A third position you want to search for
+
+locations:
+  - Remote
+  - European Economic Area
+  - Poland
+  - United States
+  # - Australia and New Zealand
+
+# --------- Optional Parameters -------
+# uploads:
+#  Resume: # PATH TO Resume 
+#  Cover Letter: # PATH TO cover letter
+#  Photo: # PATH TO photo
+
+
+# output_filename:
+# - # PATH TO OUTPUT FILE (default output.csv)
+
+# blacklist:
+# - # Company names you want to ignore
+
+#blackListTitles:
+#- # Add job titles you want to ignore
