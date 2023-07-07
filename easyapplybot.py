@@ -315,7 +315,7 @@ class EasyApplyBot:
 
 
             submitted = False
-            max_c_time = 60 * 5
+            max_c_time = 60 * 3
             c_time = time.time()
             while time.time() - c_time < max_c_time:
                 if is_present(choose_resume):
@@ -329,6 +329,7 @@ class EasyApplyBot:
                         time.sleep(random.uniform(1.5, 2.5))
 
                 # Upload Cover Letter if possible
+                """
                 if is_present(upload_locator):
 
                     input_buttons = self.browser.find_elements(upload_locator[0],upload_locator[1])
@@ -344,6 +345,7 @@ class EasyApplyBot:
 
                     # input_button[0].send_keys(self.cover_letter_loctn)
                     time.sleep(random.uniform(4.5, 6.5))
+                """
 
                 # Click Next or submitt button if possible
                 button: None = None
