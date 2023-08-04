@@ -22,7 +22,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 log = logging.getLogger(__name__)
-driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome(ChromeDriverManager(version="114.0.5735.16").install())
 
 
 def setupLogger() -> None:
@@ -315,7 +315,7 @@ class EasyApplyBot:
 
 
             submitted = False
-            max_c_time = 60 * 3
+            max_c_time = 60 * 1
             c_time = time.time()
             while time.time() - c_time < max_c_time:
                 if is_present(choose_resume):
