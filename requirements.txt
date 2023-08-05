@@ -5,3 +5,4 @@ PyYAML==6.0
 selenium==3.141.0
 webdriver_manager==3.8.6
 urllib3==1.26.15
+lxml==4.9.3
