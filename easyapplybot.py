@@ -14,7 +14,6 @@ import pandas as pd
 import pyautogui
 
 from urllib.request import urlopen
-from webdriver_manager.chrome import ChromeDriverManager
 import re
 import yaml
 from datetime import datetime, timedelta
@@ -22,7 +21,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 log = logging.getLogger(__name__)
-driver = webdriver.Chrome(ChromeDriverManager(version="114.0.5735.16").install())
+# driver = webdriver.Chrome(ChromeDriverManager(version="114.0.5735.16").install())
+driver = webdriver.Chrome()
 
 
 def setupLogger() -> None:
