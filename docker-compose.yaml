@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  browser:
+    image: selenium/standalone-chrome:latest
+    environment:
+      SE_VNC_NO_PASSWORD: 1
+    # password: secret
+    ports:
+      - 7900:7900
+      - 4444:4444
+    shm_size: 2g
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./volumes:/app/volumes
+    networks:
+      - default
+    # command: ["python3", "sample_docker_test.py"]
+    depends_on:
+      browser:
+        condition: service_healthy

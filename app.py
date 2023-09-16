@@ -11,19 +11,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import pandas as pd
-import pyautogui
+# import pyautogui
 
 from urllib.request import urlopen
 import re
 import yaml
 from datetime import datetime, timedelta
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-
 log = logging.getLogger(__name__)
-# driver = webdriver.Chrome(ChromeDriverManager(version="114.0.5735.16").install())
-driver = webdriver.Chrome()
 
+# http://browser:4444/wd/hub this domain comes from docker compose service name
+BROWSER_URL = 'http://browser:4444/wd/hub'
+os.environ['DISPLAY'] = 'browser:0'
+
+options = webdriver.ChromeOptions()
+driver = webdriver.Remote(command_executor=BROWSER_URL, options=options)
 
 def setupLogger() -> None:
     dt: str = datetime.strftime(datetime.now(), "%m_%d_%y %H_%M_%S ")
@@ -399,14 +401,15 @@ class EasyApplyBot:
         return page
 
     def avoid_lock(self) -> None:
-        x, _ = pyautogui.position()
-        pyautogui.moveTo(x + 200, pyautogui.position().y, duration=1.0)
-        pyautogui.moveTo(x, pyautogui.position().y, duration=0.5)
-        pyautogui.keyDown('ctrl')
-        pyautogui.press('esc')
-        pyautogui.keyUp('ctrl')
-        time.sleep(0.5)
-        pyautogui.press('esc')
+        pass
+        # x, _ = pyautogui.position()
+        # pyautogui.moveTo(x + 200, pyautogui.position().y, duration=1.0)
+        # pyautogui.moveTo(x, pyautogui.position().y, duration=0.5)
+        # pyautogui.keyDown('ctrl')
+        # pyautogui.press('esc')
+        # pyautogui.keyUp('ctrl')
+        # time.sleep(0.5)
+        # pyautogui.press('esc')
 
     def next_jobs_page(self, position, location, jobs_per_page):
         self.browser.get(
