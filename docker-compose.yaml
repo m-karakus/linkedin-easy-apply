@@ -2,7 +2,8 @@ version: "3"
 
 services:
   browser:
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome:116.0
+    restart: always
     environment:
       SE_VNC_NO_PASSWORD: 1
     # password: secret
@@ -20,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - ./volumes:/app/volumes
     depends_on:
@@ -31,4 +33,3 @@ services:
     #   timeout: 10s
     #   retries: 1
     #   start_period: 1s
-    restart: always
