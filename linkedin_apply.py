@@ -20,12 +20,6 @@ from datetime import datetime, timedelta
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 log = logging.getLogger(__name__)
 
-# http://browser:4444/wd/hub this domain comes from docker compose service name
-BROWSER_URL = 'http://browser:4444/wd/hub'
-os.environ['DISPLAY'] = 'browser:0'
-
-options = webdriver.ChromeOptions()
-driver = webdriver.Remote(command_executor=BROWSER_URL, options=options)
 
 def setupLogger() -> None:
     dt: str = datetime.strftime(datetime.now(), "%m_%d_%y %H_%M_%S ")
@@ -53,6 +47,7 @@ class EasyApplyBot:
         self,
         username,
         password,
+        driver,
         uploads={},
         filename='output.csv',
         blacklist=[],
@@ -68,7 +63,7 @@ class EasyApplyBot:
         self.appliedJobIDs: list = past_ids if past_ids != None else []
         self.filename: str = filename
         self.options = self.browser_options()
-        self.browser = driver
+        self.browser = driver 
         self.wait = WebDriverWait(self.browser, 30)
         self.blacklist = blacklist
         self.blackListTitles = blackListTitles
@@ -452,9 +447,16 @@ def main():
     for key in uploads.keys():
         assert uploads[key] != None
 
+    # http://browser:4444/wd/hub this domain comes from docker compose service name
+    BROWSER_URL = 'http://browser:4444/wd/hub'
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Remote(command_executor=BROWSER_URL, options=options)  
+    # driver = webdriver.Chrome()
+    
     bot = EasyApplyBot(
         parameters['username'],
         parameters['password'],
+        driver=driver,
         uploads=uploads,
         filename=output_filename,
         blacklist=blacklist,
