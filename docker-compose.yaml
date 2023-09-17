@@ -24,6 +24,7 @@ services:
     restart: always
     volumes:
       - ./volumes:/app/volumes
+      - ./logs:/app/logs
     depends_on:
       browser:
         condition: service_healthy

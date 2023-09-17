@@ -438,8 +438,6 @@ def main():
 
     log.info({k: parameters[k] for k in parameters.keys() if k not in ['username', 'password']})
 
-    output_filename: list = [f for f in parameters.get('output_filename', ['output.csv']) if f != None]
-    output_filename: list = output_filename[0] if len(output_filename) > 0 else 'output.csv'
     blacklist = parameters.get('blacklist', [])
     blackListTitles = parameters.get('blackListTitles', [])
 
@@ -458,7 +456,7 @@ def main():
         parameters['password'],
         driver=driver,
         uploads=uploads,
-        filename=output_filename,
+        filename='./volumes/output.csv',
         blacklist=blacklist,
         blackListTitles=blackListTitles
     )
