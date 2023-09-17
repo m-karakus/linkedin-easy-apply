@@ -12,4 +12,5 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 # run gunicorn
-CMD gunicorn --bind 0.0.0.0:8899 main:app -k uvicorn.workers.UvicornWorker
+CMD [ "python3", "-u", "app.py"]
+# CMD gunicorn --bind 0.0.0.0:8899 main:app -k uvicorn.workers.UvicornWorker

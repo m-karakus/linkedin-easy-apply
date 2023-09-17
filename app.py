@@ -49,7 +49,7 @@ class EasyApplyBot:
         password,
         driver,
         uploads={},
-        filename='output.csv',
+        filename='./volumes/output.csv',
         blacklist=[],
         blackListTitles=[]
     ) -> None:
