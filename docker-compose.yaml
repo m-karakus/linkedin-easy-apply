@@ -23,8 +23,9 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./volumes:/app/volumes
-      - ./logs:/app/logs
+      # - ./volumes:/app/volumes
+      # - ./logs:/app/logs
+      - .:/app:rw
     depends_on:
       browser:
         condition: service_healthy
