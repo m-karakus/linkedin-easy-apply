@@ -14,11 +14,11 @@ from datetime import datetime
 LOG_LEVEL = os.getenv("LOG_LEVEL") or "INFO"
 
 log_levels = {
-    'debug': logging.DEBUG,
-    'info': logging.INFO,
-    'warning': logging.WARNING,
-    'error': logging.ERROR,
-    'critical': logging.CRITICAL,
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+    "critical": logging.CRITICAL,
 }
 
 default_log_level = log_levels.get(LOG_LEVEL.lower())
@@ -29,16 +29,16 @@ class Logger:
         """
         Custom Usage:
         logger = Logger()
-        msg = 'This is a log message'
+        msg = "This is a log message"
         logger.log(msg,log_level="error")
         or 
         logger.error("This is an error message")
         """
-        self.logger = logging.getLogger('logger')
+        self.logger = logging.getLogger("logger")
         if not self.logger.handlers:
 
             # create the handlers and call logger.addHandler(logging_handler)       
-            self.logger = logging.getLogger('logger')
+            self.logger = logging.getLogger("logger")
             # self.logger.setLevel(logging.DEBUG)
             self.logger.setLevel(default_log_level)
 
@@ -49,23 +49,23 @@ class Logger:
             json_formatter = logging.Formatter(frmt)
             json_formatter.converter = time.gmtime # set timezone as gmtime
 
-            frmt = '%(asctime)s - %(levelname)s - %(levelno)s - %(message)s'
+            frmt = "%(asctime)s | %(levelname)s | %(levelno)s | %(message)s | %(function)s"
             string_formatter = logging.Formatter(frmt)
             string_formatter.converter = time.gmtime # set timezone as gmtime
             
             # Create a file handler
-            path = os.path.abspath(os.path.join('logs'))
+            path = os.path.abspath(os.path.join("logs"))
             if not os.path.isdir(path):
                 os.mkdir(path)
-            date = datetime.today().strftime('%Y%m%d')
+            date = datetime.today().strftime("%Y%m%d")
             if not os.path.exists(path):
                 os.makedirs(path)
-            file_path = os.path.abspath(os.path.join(path, 'log_{date}.log'.format(date=date)))
-            fh = logging.FileHandler(file_path,mode='a',encoding='utf8')
+            file_path = os.path.abspath(os.path.join(path, "log_{date}.log".format(date=date)))
+            fh = logging.FileHandler(file_path,mode="a",encoding="utf8")
             
             # fh.setLevel(logging.DEBUG)
             fh.setLevel(default_log_level)
-            fh.setFormatter(json_formatter)
+            fh.setFormatter(string_formatter)
 
             # Create a console handler
             ch = logging.StreamHandler()
@@ -140,22 +140,22 @@ def log_container(func):
             } 
         try:
             # send start message
-            message = 'Started'
-            logger.log(message,extra=extra)
+            message = "Started"
+            logger.log(message,extra=extra, log_level="debug")
 
             # call the function
             result = func(*args, **kwargs)
             
             # send end message
-            # msg['msg'] = 'Ended'
+            # msg["msg"] = "Ended"
             # logger.log(msg,extra=extra)
             
             return result
     
         except Exception as e:
-            message = str(e) + str(traceback.format_exc()).replace('\n',' ')
+            message = str(e) + str(traceback.format_exc()).replace("\n"," ")
             logger.log(message,log_level="error",extra=extra)
-            raise e
+    
     return wrapper
 
 
