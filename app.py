@@ -167,7 +167,7 @@ class EasyApplyBot:
             total_job = len(job_ids)
             # loop over ids to apply
             for i, job_id in enumerate(job_ids):
-                process = round(i/total_job,2)
+                process = round(i/total_job,2) * 100
                 log.info(f"Process: {i}/{total_job}, %{process}")
                 self.get_job_page(job_id)
 
