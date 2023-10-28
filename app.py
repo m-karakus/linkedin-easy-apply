@@ -52,7 +52,7 @@ class EasyApplyBot:
         # self.base_url = "https://www.linkedin.com/jobs/search/?f_AL=true&f_WT=2&keywords="
         
     @log_container
-    def get_previous_ids(file_path):
+    def get_previous_ids(self,file_path):
         try:
             df = pd.read_csv(
                 file_path,
