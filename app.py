@@ -255,6 +255,7 @@ class EasyApplyBot:
             # TODO: put auto fill
             #class="fb-dash-form-element__error-field artdeco-text-input--input"
 
+
             submitted = False
             max_c_time = 60 * 1
             c_time = time.time()
@@ -283,6 +284,14 @@ class EasyApplyBot:
                             if "Please enter a valid answer" in text:
                                 button = None
                                 break
+                    try:
+                        text_field = self.driver.find_element(By.XPATH, "//*[contains(@id,'single-line-text-form-component')]")
+                        text_value = text_field.get_attribute("value")
+                        if not text_value:
+                            text_field.send_keys("9")
+                    except:
+                        pass
+                                        
                     if button:
                         button.click()
                         time.sleep(random.uniform(1.5, 2.5))
