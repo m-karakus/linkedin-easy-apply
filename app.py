@@ -782,7 +782,13 @@ class EasyApplyBot:
                                 }
                             } else {
                                 // text, tel, email, textarea, etc.
-                                if (!(f.value || '').trim()) {
+                                const isNumeric = (f.id || '').toLowerCase().includes('numeric') || (f.getAttribute('aria-label') || '').toLowerCase().includes('numeric');
+                                if (isNumeric) {
+                                    const num = parseFloat(f.value);
+                                    if (isNaN(num) || num <= 0 || num > 100) {
+                                        results.push({el: f, kind: 'text', id: f.id || '', placeholder: f.getAttribute('placeholder') || ''});
+                                    }
+                                } else if (!(f.value || '').trim()) {
                                     results.push({el: f, kind: 'text', id: f.id || '', placeholder: f.getAttribute('placeholder') || ''});
                                 }
                             }
@@ -1094,14 +1100,14 @@ class EasyApplyBot:
                 # Try JS click on shadow DOM buttons that match
                 for sb in (shadow_buttons or []):
                     if sb.get('disabled'): continue
-                    al = (sb.get('al', '') or '')
-                    text = (sb.get('text', '') or '')
+                    al = (sb.get('al', '') or '').lower()
+                    text = (sb.get('text', '') or '').lower()
                     action = None
-                    if al == 'Continue to next step' or (al == 'Next' and text != 'Next'):
+                    if 'next' in al or 'continue' in al or (al == '' and 'next' in text):
                         action = 'next'
-                    elif al in ('Review your application', 'Review'):
+                    elif 'review' in al:
                         action = 'review'
-                    elif al in ('Submit application', 'Submit'):
+                    elif 'submit' in al or 'send' in al or (al == '' and ('submit' in text or 'send' in text)):
                         action = 'submit'
                     
                     if action:
@@ -1113,12 +1119,9 @@ class EasyApplyBot:
                                 const al = (b.getAttribute('aria-label') || '').toLowerCase();
                                 const txt = (b.textContent || '').trim().toLowerCase();
                                 if (!b.disabled && (
-                                    al === 'continue to next step' ||
-                                    al === 'review your application' ||
-                                    al === 'submit application' ||
-                                    al === 'next' ||
-                                    al === 'review' ||
-                                    al === 'submit'
+                                    al.includes('next') || al.includes('continue') ||
+                                    al.includes('review') ||
+                                    al.includes('submit') || al.includes('send')
                                 )) {{
                                     b.click(); return 'clicked';
                                 }}
