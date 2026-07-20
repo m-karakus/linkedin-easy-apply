@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   browser:
     image: selenium/standalone-chrome:116.0
@@ -26,6 +24,8 @@ services:
       # - ./volumes:/app/volumes
       # - ./logs:/app/logs
       - .:/app:rw
+    environment:
+      LOG_LEVEL: DEBUG
     depends_on:
       browser:
         condition: service_healthy

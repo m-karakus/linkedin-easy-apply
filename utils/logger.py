@@ -155,6 +155,7 @@ def log_container(func):
         except Exception as e:
             message = str(e) + str(traceback.format_exc()).replace("\n"," ")
             logger.log(message,log_level="error",extra=extra)
+            raise
     
     return wrapper
 
