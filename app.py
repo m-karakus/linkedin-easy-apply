@@ -83,22 +83,6 @@ class EasyApplyBot:
                 log.info("Waiting 60 seconds for manual intervention...")
                 time.sleep(60)
 
-            # Handle SSO landing page — try clicking email/password sign-in
-            sso_selectors = [
-                (By.XPATH, "//button[contains(text(), 'Sign in with') or contains(text(), 'E-posta') or contains(text(), 'email')]"),
-                (By.XPATH, "//button[@aria-label and (contains(@aria-label, 'email') or contains(@aria-label, 'Email') or contains(@aria-label, 'e-posta'))]"),
-                (By.XPATH, "//button[contains(@class, 'sign-in')]"),
-            ]
-            for selector in sso_selectors:
-                try:
-                    btn = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(selector))
-                    log.info(f"Clicking SSO sign-in button")
-                    btn.click()
-                    time.sleep(3)
-                    break
-                except:
-                    continue
-
             # Debug: check what inputs exist on the page via JS
             input_info = self.driver.execute_script("""
                 const inputs = document.querySelectorAll('input');
@@ -1133,6 +1117,7 @@ class EasyApplyBot:
                         time.sleep(random.uniform(2, 3))
                         if action == 'submit':
                             submitted = True
+                            message = "{job_id} - Application Submitted!".format(job_id=str(job_id))
                         elif action == 'review' and loop_count >= 5:
                             # After 5+ review clicks without progress, try clicking Submit directly
                             log.debug(f"Loop {loop_count}: Review stuck, trying Submit fallback")
@@ -1244,7 +1229,10 @@ class EasyApplyBot:
     @log_container
     def next_jobs_page(self, position, location, jobs_per_page):
 
-        self.driver.get(self.base_url + position + location + "&start=" + str(jobs_per_page))
+        page_num = jobs_per_page // 25
+        url = self.base_url + position + location + f"&pageNum={page_num}"
+        log.debug(f"Loading page URL: {url}")
+        self.driver.get(url)
 
         self.load_page()
         return (self.driver, jobs_per_page)
