@@ -480,7 +480,7 @@ class EasyApplyBot:
             ids = 0
             job_ids = np.array([], dtype='i')
 
-            for i  in range(25,501,25):
+            for i in range(0, 501, 25):
                 try:
                     count, available_ids = self.get_job_ids()
                 except:
@@ -488,11 +488,12 @@ class EasyApplyBot:
                     available_ids = np.array([], dtype='i')
                 
                 job_ids = np.unique(np.append(job_ids, available_ids))
-                # it assumed that 25 jobs are listed in the results window
+                if i == 0:
+                    continue
                 if count < 25:
                     break
                 else:
-                    self.driver, jobs_per_page = self.next_jobs_page(position,location,i)
+                    self.driver, jobs_per_page = self.next_jobs_page(position, location, i)
                     randoTime = random.uniform(3.5, 4.9)
             
             total_job = len(job_ids)
@@ -846,8 +847,9 @@ class EasyApplyBot:
                         el_id = f_info.get('id', '')
                         try:
                             if kind == 'text':
+                                is_loc = 'location' in el_id.lower() or 'geo' in el_id.lower()
                                 is_num = 'numeric' in el_id.lower()
-                                val = 'Remote, United States' if ('location' in el_id.lower() or 'geo' in el_id.lower()) else ('5' if is_num else '9')
+                                val = 'Tekirda\u011f, T\u00fcrkiye' if is_loc else ('5' if is_num else '9')
                                 el = self.driver.execute_script("""
                                     return document.querySelector('#interop-outlet')?.shadowRoot?.getElementById(arguments[0]);
                                 """, el_id)
@@ -866,6 +868,20 @@ class EasyApplyBot:
                                     el.dispatchEvent(new Event('change', {bubbles: true}));
                                     el.dispatchEvent(new FocusEvent('blur', {bubbles: true}));
                                 """, el_id, val, is_num)
+                                if is_loc:
+                                    time.sleep(1)
+                                    self.driver.execute_script("""
+                                        const items = document.querySelectorAll('[role="option"], .artdeco-typeahead-suggestion, [data-test-typeahead-suggestion], li[role="presentation"]');
+                                        for (const it of items) {
+                                            if (it.offsetParent !== null && !it.disabled) {
+                                                const txt = (it.textContent || '').toLowerCase();
+                                                if (txt.includes('tekirda\u011f')) { it.click(); return 'clicked'; }
+                                            }
+                                        }
+                                        for (const it of items) {
+                                            if (it.offsetParent !== null && !it.disabled) { it.click(); break; }
+                                        }
+                                    """)
                                 log.debug(f"Filled text '{el_id}' -> '{val}' (is_num={is_num})")
                                 time.sleep(0.3)
                             elif kind == 'number':
@@ -923,7 +939,7 @@ class EasyApplyBot:
                                 is_location = 'location' in el_id.lower() or 'geo' in el_id.lower()
                                 if is_location:
                                     # Location typeahead: send keys + native set + blur
-                                    loc_val = 'Remote, United States'
+                                    loc_val = 'Tekirda\u011f, T\u00fcrkiye'
                                     el = self.driver.execute_script("""
                                         return document.querySelector('#interop-outlet')?.shadowRoot?.getElementById(arguments[0]);
                                     """, el_id)
@@ -940,13 +956,19 @@ class EasyApplyBot:
                                         el.dispatchEvent(new Event('change', {bubbles: true}));
                                         el.dispatchEvent(new Event('blur', {bubbles: true}));
                                     """, el_id, loc_val)
-                                    # Try clicking autocomplete option
-                                    time.sleep(0.5)
+                                    time.sleep(1)
                                     self.driver.execute_script("""
-                                        const items = document.querySelectorAll('[role="option"], .artdeco-typeahead-suggestion, [data-test-typeahead-suggestion]');
+                                        const items = document.querySelectorAll('[role="option"], .artdeco-typeahead-suggestion, [data-test-typeahead-suggestion], li[role="presentation"]');
+                                        for (const it of items) {
+                                            if (it.offsetParent !== null && !it.disabled) {
+                                                const txt = (it.textContent || '').toLowerCase();
+                                                if (txt.includes('tekirda\u011f')) { it.click(); return 'clicked'; }
+                                            }
+                                        }
                                         for (const it of items) {
                                             if (it.offsetParent !== null && !it.disabled) { it.click(); break; }
                                         }
+                                        return 'fallback_clicked';
                                     """)
                                     log.debug(f"Filled location combobox '{el_id}' -> '{loc_val}'")
                                 else:
@@ -1229,8 +1251,9 @@ class EasyApplyBot:
     @log_container
     def next_jobs_page(self, position, location, jobs_per_page):
 
-        page_num = jobs_per_page // 25
-        url = self.base_url + position + location + f"&pageNum={page_num}"
+        url = self.base_url + position + location
+        if jobs_per_page > 0:
+            url += f"&start={jobs_per_page}"
         log.debug(f"Loading page URL: {url}")
         self.driver.get(url)
 

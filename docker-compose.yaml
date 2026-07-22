@@ -4,6 +4,9 @@ services:
     restart: unless-stopped
     environment:
       SE_VNC_NO_PASSWORD: 1
+      SE_NODE_MAX_SESSIONS: 1
+      SE_SESSION_REQUEST_TIMEOUT: 300
+      SE_OPTS: "--session-timeout 300"
     # password: secret
     ports:
       - 7900:7900
